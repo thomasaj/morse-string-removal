@@ -1,5 +1,4 @@
-var getTotalDeletionPaths = function (given, remove)
-{
+var getTotalDeletionPaths = (given, remove) => {
     /// <summary> 
     /// Get count of possible unique strings produced by removing a given Morse code string
     /// consisting of the characters '*', '-', and '_' (dot, dash, and space) from another.
@@ -22,19 +21,17 @@ var getTotalDeletionPaths = function (given, remove)
 	];
 
 	var removeArr = remove.split('');
-	for (var i = 0; i < removeArr.length; i++)
-	{
+	for (var i = 0; i < removeArr.length; i++) {
 		var charToRemove = removeArr[i];
         
 		// get all variants from where we have the current number of deletions
-		var variantsToCheck = variants.filter(function (variant) { return variant.deletions.length === i; });
+		var variantsToCheck = variants.filter((variant) => return variant.deletions.length === i);
 
-		for (var j = 0; j < variantsToCheck.length; j++)
-		{
+		for (var j = 0; j < variantsToCheck.length; j++) {
 			var curVariant = variantsToCheck[j];
 
 			// get the indices of the current character, but filter if the given index is outside of the absolute bounds of the given string
-			var indices = getIndices(curVariant.remaining, charToRemove).filter(function (index) { return index <= given.length - remove.length });
+			var indices = getIndices(curVariant.remaining, charToRemove).filter((index) => index <= given.length - remove.length);
 			for (var k = 0; k < indices.length; k++)
 			{
 				var deletion = curVariant.start + indices[k]; // deletion at absolute position in given string
@@ -49,13 +46,13 @@ var getTotalDeletionPaths = function (given, remove)
 	}
 
 	// get all recorded variants that have completed all deletions
-	var completeVariants = variants.filter(function(variant) { return variant.deletions.length === remove.length; });
+	var completeVariants = variants.filter((variant) => variant.deletions.length === remove.length);
 
 	// apply deletions to get full list of result strings
-	var resultStrings = completeVariants.map(function(variant) { return removeIndices(given, variant.deletions); });
+	var resultStrings = completeVariants.map((variant) => removeIndices(given, variant.deletions));
 
 	// filter out duplicates. sort to ensure duplicates are adjacent for linear filtering
-	var uniqueResultStrings = resultStrings.sort().filter(function(item, i, arr) { return !i || item !== arr[i-1]; });
+	var uniqueResultStrings = resultStrings.sort().filter((item, i, arr) => !i || item !== arr[i-1]);
 
 	return uniqueResultStrings.length;
 }
@@ -68,10 +65,8 @@ var getIndices = function (string, char)
     /// <returns type="Array" elementType="Number">Array of indices where character appears in string</returns>
     
 	var indices = [];
-	for (var i = 0; i < string.length; i++)
-	{
-		if (string[i] === char)
-		{
+	for (var i = 0; i < string.length; i++) {
+		if (string[i] === char) {
 			indices.push(i);
 		}
 	}
@@ -79,23 +74,19 @@ var getIndices = function (string, char)
 }
 
 // removes characters at specified indices from string
-var removeIndices = function (string, indices)
-{
+var removeIndices = (string, indices) => {
     /// <summary>Remove given indices from a string</summary>
     /// <param name="string" type="String">String to remove indices from</param>
     /// <param name="indices" type="Array" elementType="Number">Array of indices to remove from string</param>
     /// <returns type="String">Input string with given indices removed</returns>
     
 	var result = '';
-	for (var i = 0; i < string.length; i++)
-	{
-		if (i === indices[0])
-		{
+	for (var i = 0; i < string.length; i++) {
+		if (i === indices[0]) {
 			result += 'X'; // mark index in result string for easy removal
 			indices.splice(0, 1);
 		} 
-		else
-		{
+		else {
 			result += string[i];
 		}
 	}
